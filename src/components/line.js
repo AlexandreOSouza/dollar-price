@@ -1,46 +1,47 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import { format, parseISO } from 'date-fns';
+import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
-const data = {
-  labels: ['1', '2', '3', '4', '5', '6'],
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      fill: false,
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgba(255, 99, 132, 0.2)',
-    },
-  ],
-};
 
-const options = {
-  scales: {
-    yAxes: [
-      {
-        ticks: {
-          beginAtZero: true,
-        },
-      },
-    ],
-  },
-};
+
 
 function LineChart(props) {
 
-  // const { type } = props
-
-  // if (type === 'yearly') {
-  //   dataYearly()
-  // }
+  const [dates, setDates] = useState([])
+  const [averages, setAverages] = useState([])
 
   useEffect(() => {
-    axios('https://www.remessaonline.com.br/api/quotation-history/USD/COM/yearly', { crossdomain: true })
-    .then(response => {
-      console.log(response)
-    })
+    let dots = dataYearly()
+    console.log(dots)
+    setDates(dots.map(dot => dot.date))
+    setAverages(dots.map(dot => dot.average))
   }, [])
+  
+  const data = {
+    labels: dates,
+    datasets: [
+      {
+        label: '# of Votes',
+        data: averages,
+        fill: false,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgba(255, 99, 132, 0.2)',
+      },
+    ],
+  };
+
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
 
   return (
     <>
@@ -61,14 +62,16 @@ function LineChart(props) {
 }
 
 
-function dataYearly() {
-  const apiURL = 'https://www.remessaonline.com.br/api/quotation-history/USD/COM/yearly'
-  fetch(apiURL)
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch(function(error) {  
-    console.log('Request failed', error)  
-  })
+async function dataYearly() {
+    const apiURL = 'https://www.remessaonline.com.br/api/quotation-history/USD/COM/yearly'
+    const { data } = await axios(apiURL, { crossdomain: true })
+    const dots = data.map(dot => {
+      return {
+        date: format(parseISO(dot.date), 'dd/MM/yyyy'),
+        average: Number(dot.average).toFixed(2)
+      }
+    })
+    return dots
 }
 
 
