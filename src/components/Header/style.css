@@ -1,0 +1,21 @@
+.header {
+    position: absolute;
+    width: 100%;
+    height: 10vh;
+    background: #191b29;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 1rem;
+}
+
+.arrowBack {
+    position: absolute;
+    margin-right: 95%;
+    color: #fafbff;
+    cursor: pointer;
+}

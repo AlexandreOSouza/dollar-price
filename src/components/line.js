@@ -12,26 +12,45 @@ function LineChart(props) {
   const [averages, setAverages] = useState([])
 
   useEffect(() => {
-    let dots = dataYearly()
-    console.log(dots)
-    setDates(dots.map(dot => dot.date))
-    setAverages(dots.map(dot => dot.average))
+    const fetchData = async () => { 
+      const dots = await dataYearly() 
+      setDates(dots.map(dot => dot.date))
+      setAverages(dots.map(dot => dot.average))
+    }
+    fetchData()
   }, [])
   
-  const data = {
-    labels: dates,
-    datasets: [
-      {
-        label: '# of Votes',
-        data: averages,
-        fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.2)',
-      },
-    ],
+  const data = (canvas) => {
+
+    const ctx = canvas.getContext("2d");
+    const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+    gradient.addColorStop(0, 'rgba(250,174,50,0.7)');   
+    gradient.addColorStop(1, 'rgba(250,174,50,0)');
+    return {
+      labels: dates,
+      datasets: [
+        {
+          label: 'R$',
+          data: averages,
+          fill: true,
+          backgroundColor : gradient,
+          borderColor : "#ff6c23",
+          borderWidth: 1,
+          pointColor : "#fffefa",
+          pointStrokeColor : "#ff6c23",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "#fffefa",
+        },
+      ],
+    }
   };
 
   const options = {
+    plugins:{   
+      legend: {
+        display: false
+      },
+    },
     scales: {
       yAxes: [
         {
@@ -45,18 +64,7 @@ function LineChart(props) {
 
   return (
     <>
-      <div className='header'>
-        <h1 className='title'>Line Chart</h1>
-        <div className='links'>
-          <a
-            className='btn btn-gh'
-            href='https://github.com/reactchartjs/react-chartjs-2/blob/master/example/src/charts/Line.js'
-          >
-            Github Source
-          </a>
-        </div>
-      </div>
-      <Line data={data} options={options} />
+      <Line className="chart" width="100vw" height="20vh" data={data} options={options} />
     </>
   )
 }

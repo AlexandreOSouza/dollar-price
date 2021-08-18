@@ -1,0 +1,38 @@
+.current {
+    position: absolute;
+    width: 20vw;
+    height: 20vh;
+    
+    margin-top: 13vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.coinType {
+    margin-right: 0.5vw;
+    margin-bottom: 3.5vh;
+    font-size: 1.5rem;
+    color: #5d5d78;
+}
+
+.currentValue {
+    color: #fafbff;
+    font-size: 5rem;
+}
+
+.tranding {
+    position: absolute;
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.isUp {
+    color: rgb(33, 134, 2);
+}
+
+.isDown {
+    color: rgb(134, 2, 2);
+}
