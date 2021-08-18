@@ -11,14 +11,19 @@ function LineChart(props) {
   const [dates, setDates] = useState([])
   const [averages, setAverages] = useState([])
 
+  const { type } = props
+
   useEffect(() => {
+
     const fetchData = async () => { 
-      const dots = await dataYearly() 
+      const dots = await fetchDataChart(type.value) 
       setDates(dots.map(dot => dot.date))
       setAverages(dots.map(dot => dot.average))
     }
-    fetchData()
-  }, [])
+    setDates([])
+    setAverages([])
+    fetchData()    
+  }, [type.value])
   
   const data = (canvas) => {
 
@@ -69,9 +74,9 @@ function LineChart(props) {
   )
 }
 
-
-async function dataYearly() {
-    const apiURL = 'https://www.remessaonline.com.br/api/quotation-history/USD/COM/yearly'
+async function fetchDataChart(type) {
+  const apiURL = `https://www.remessaonline.com.br/api/quotation-history/USD/COM/${type}`
+  console.log(apiURL)
     const { data } = await axios(apiURL, { crossdomain: true })
     const dots = data.map(dot => {
       return {
@@ -81,6 +86,5 @@ async function dataYearly() {
     })
     return dots
 }
-
 
 export default LineChart;

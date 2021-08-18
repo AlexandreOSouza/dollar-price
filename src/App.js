@@ -7,8 +7,17 @@ import CurrentCotation from './components/CurrentCotation';
 
 function App() {
 
-  const [opSelected, setOpSelected] = useState('1Y')
-  const options = ['1D', '2W', '1M', '6M', '1Y']
+  const options = [
+    {label: '1D', value: 'daily'}, 
+    {label: '2W', value: 'biweekly'}, 
+    {label: '1M', value: 'monthly'},
+    {label: '6M', value: 'semiannual'}, 
+    {label: '1Y', value: 'yearly'}
+  ]
+
+  const [opSelected, setOpSelected] = useState(options[4])
+  
+
   const opClickHandler = (op) => {
     setOpSelected(op)
   }
@@ -25,10 +34,10 @@ function App() {
         <ChartOptions 
           options={options} 
           clickFunc={opClickHandler} 
-          selected={opSelected}
+          selected={opSelected.label}
         />
       </div>
-      <LineChart type='yearly'/>
+      <LineChart type={opSelected}/>
     </div>
   );
 }

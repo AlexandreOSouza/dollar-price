@@ -15,8 +15,8 @@ function ChartOptions(props) {
                         <li 
                             onClick={() => clickFunc(op)} 
                             key={index}
-                            className={op === selected ? 'selected' : ''}
-                        >{op}</li>
+                            className={op.label === selected ? 'selected' : ''}
+                        >{op.label}</li>
                     )
                 })}
             </ul>
