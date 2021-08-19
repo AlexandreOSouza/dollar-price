@@ -76,15 +76,14 @@ function LineChart(props) {
 
 async function fetchDataChart(type) {
   const apiURL = `https://www.remessaonline.com.br/api/quotation-history/USD/COM/${type}`
-  console.log(apiURL)
-    const { data } = await axios(apiURL, { crossdomain: true })
-    const dots = data.map(dot => {
-      return {
-        date: format(parseISO(dot.date), 'dd/MM/yyyy'),
-        average: Number(dot.average).toFixed(2)
-      }
-    })
-    return dots
+  const { data } = await axios(apiURL, { crossdomain: true })
+  const dots = data.map(dot => {
+    return {
+      date: format(parseISO(dot.date), (type === 'daily') ? 'dd/MM/yyyy hh:MM:ss' : 'dd/MM/yyyy'),
+      average: Number((type === 'daily') ? dot.value : dot.average).toFixed(2)
+    }
+  })
+  return dots
 }
 
 export default LineChart;
